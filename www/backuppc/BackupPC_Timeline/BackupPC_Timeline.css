@@ -1,0 +1,48 @@
+/*
+ * BackupPC_Timeline extra CSS
+ */
+
+/*Bubble styles*/
+.timeline-event-bubble-title a {
+    text-decoration:none;
+}
+.timeline-event-bubble-time{
+    color: #000;
+}
+
+#tl {
+    min-height:120px;
+    border: 1px solid #aaa;
+}
+.decorator {
+    background-color: #95B8DB;
+}
+
+#movcontrols {
+    margin-top:2px;
+}
+
+#legend {
+    float: left;
+    width:100%;
+    background-color: #eee;
+}
+#legend div, #legend li {
+    display: inline;
+    float: left;
+    padding: 0 5px;
+}
+#legend hr {
+    border: 0 none;
+    height: 4px;
+    width: 40px;
+}
+
+#controls {
+    font-size: 8pt;
+    padding: 4px;
+    background-color: #eee;
+}
+#controls td {
+    font-size: 10pt;
+}
