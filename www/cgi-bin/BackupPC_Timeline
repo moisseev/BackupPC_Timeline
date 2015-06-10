@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/local/bin/perl
 #============================================================= -*-perl-*-w
 #
 # BackupPC_Admin: Apache/CGI interface for BackupPC.
