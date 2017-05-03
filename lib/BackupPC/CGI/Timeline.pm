@@ -71,8 +71,83 @@ sub action {
 <link rel="stylesheet" href="$Conf{CgiImageDirURL}/BackupPC_Timeline/BackupPC_Timeline.css" type="text/css">
 <script src="$Conf{CgiImageDirURL}/BackupPC_Timeline/BackupPC_Timeline.js" type="text/javascript"></script>
 
-</head>
-<!-- Skip header lines
+</head><body onload="document.getElementById('NavMenu').style.height=document.body.scrollHeight; onLoad();" onresize="onResize();">
+
+
+<div id="navigation-container">
+	<div id="logo-container">
+		<a href="/"><img src="$Conf{CgiImageDirURL}/logo.gif"></a>
+	</div>
+EOF
+
+    my $noBrowse = 0;
+    my @adminLinks = (
+        { link => "?action=status",        name => $Lang->{Status}},
+        { link => "?action=summary",       name => $Lang->{PC_Summary}},
+        { link => "?action=editConfig",    name => $Lang->{CfgEdit_Edit_Config},
+                                           priv => 1},
+        { link => "?action=editConfig&newMenu=hosts",
+                                           name => $Lang->{CfgEdit_Edit_Hosts},
+                                           priv => 1},
+        { link => "?action=adminOpts",     name => $Lang->{Admin_Options},
+                                           priv => 1},
+        { link => "?action=view&type=LOG", name => $Lang->{LOG_file},
+                                           priv => 1},
+        { link => "?action=LOGlist",       name => $Lang->{Old_LOGs},
+                                           priv => 1},
+        { link => "?action=emailSummary",  name => $Lang->{Email_summary},
+                                           priv => 1},
+        { link => "?action=queue",         name => $Lang->{Current_queues},
+                                           priv => 1},
+        @{$Conf{CgiNavBarLinks} || []},
+    );
+    my $host = $In{host};
+
+
+        $Conf{CgiHeaders} .= <<EOF;
+<div class="NavMenu" id="NavMenu">
+EOF
+    my $hostSelectbox = "<option value=\"#\">$Lang->{Select_a_host}</option>";
+    my @hosts = GetUserHosts($Conf{CgiNavBarAdminAllHosts});
+        $Conf{CgiHeaders} .= "<h2 class='NavTitle'>$Lang->{Hosts}</h2>";
+    if ( defined($Hosts) && %$Hosts > 0 && @hosts ) {
+        foreach my $host ( @hosts ) {
+	    NavLink("?host=${EscURI($host)}", $host)
+		    if ( @hosts < $Conf{CgiNavBarAdminAllHosts} );
+	    my $sel = " selected" if ( $host eq $In{host} );
+	    $hostSelectbox .= "<option value=\"?host=${EscURI($host)}\"$sel>"
+			    . "$host</option>";
+        }
+    }
+    if ( @hosts >= $Conf{CgiNavBarAdminAllHosts} ) {
+        $Conf{CgiHeaders} .= <<EOF;
+<select onChange="document.location=this.value">
+$hostSelectbox
+</select>
+EOF
+    }
+    if ( $Conf{CgiSearchBoxEnable} ) {
+        $Conf{CgiHeaders} .= <<EOF;
+<form action="$MyURL" method="get">
+    <input type="text" name="host" size="14" maxlength="64">
+    <input type="hidden" name="action" value="hostInfo"><input type="submit" value="$Lang->{Go}" name="ignore">
+    </form>
+EOF
+    }
+    $Conf{CgiHeaders} .= "<h2 class='NavTitle'>$Lang->{NavSectionTitle_}</h2>";
+    foreach my $l ( @adminLinks ) {
+        if ( $PrivAdmin || !$l->{priv} ) {
+            my $txt = $l->{lname} ne "" ? $Lang->{$l->{lname}} : $l->{name};
+            $Conf{CgiHeaders} .= "<a href=\"$l->{link}\">$txt</a>";
+        }
+    }
+
+    $Conf{CgiHeaders} .= <<EOF;
+</div>
+</div> <!-- end #navigation-container -->
+
+
+<!--[if False]> Skip header lines
 EOF
 
     Header( "BackupPC Timeline", &Content() );
@@ -111,11 +186,8 @@ sub LatestBackupEnd {
 sub Content {
     my $content = <<EOF;
 
--->
+<![endif]-->
 
-<body onload="document.getElementById('NavMenu').style.height=document.body.scrollHeight; onLoad();" onresize="onResize();">
-<a href="http://backuppc.sourceforge.net"><img src="/backuppc/logo.gif" hspace="5" vspace="7" border="0"></a>
-<div id="Content">
     <div class="h1">BackupPC Timeline</div>
     <br>
     <noscript>
@@ -172,7 +244,7 @@ Show number of days
 
     <p>If an event matches the text in any of the boxes, then the event passes the filter.
         This is "ORing" together the input boxes.</p>
-
+</div>
 EOF
 
     return $content;
