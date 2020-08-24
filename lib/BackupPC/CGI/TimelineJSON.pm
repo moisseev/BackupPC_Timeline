@@ -58,6 +58,7 @@ Content-Type: application/json
 
 EOF
 
+    my ($untaintedMyURL) = $MyURL =~ /^([-~.\/\w]+)$/;
     my $notFirstEvent = 0;
 
     for my $host ( GetUserHosts(1) ) {
@@ -70,10 +71,10 @@ EOF
             print ",\n\n"
               if $notFirstEvent++;
 
-            printf "{'start': %s,\n",             Timeconv( $_->{startTime} );
-            printf "'end': %s,\n",                Timeconv( $_->{endTime} );
-            printf "'title': '%s',\n",            $host;
-            printf "'link': '$MyURL?host=%s',\n", $host;
+            printf "{'start': %s,\n",  Timeconv( $_->{startTime} );
+            printf "'end': %s,\n",     Timeconv( $_->{endTime} );
+            printf "'title': '%s',\n", $host;
+            printf "'link': '" . $untaintedMyURL . "?host=%s',\n", $host;
             printf "'description': 'Backup #: %d', \n", $_->{num},;
             printf "'caption': 'Backup#: %d',\n",       $_->{num};
 
