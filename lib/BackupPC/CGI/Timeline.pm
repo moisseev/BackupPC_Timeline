@@ -39,7 +39,8 @@ use BackupPC::CGI::Lib qw(:all);
 
 # Default number of days to view (a number of days to look backwards).
 my $URLParamDays = 3;
-my $daysNumRE    = qr/^\d*(\.\d+)?$/;
+my $daysNumREstr = '^\d*(\.\d+)?$';
+my $daysNumRE    = qr/$daysNumREstr/;
 
 &GetNumDays();
 
@@ -212,7 +213,7 @@ sub Content {
         <div align="center" style="width:59%;">
             <form action="$MyURL" method="get">
 Show number of days
-                <input type="text" name="days" value="$URLParamDays" size="5" maxlength="8" pattern="$daysNumRE" required>
+                <input type="text" name="days" value="$URLParamDays" size="5" maxlength="8" pattern="$daysNumREstr" required>
                 <input type="hidden" name="action" value="timeline"><input type="submit" value="$Lang->{Go}" name="ignore">
             </form>
         </div>
