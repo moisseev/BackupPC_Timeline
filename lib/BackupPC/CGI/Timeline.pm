@@ -151,7 +151,12 @@ EOF
 <!--[if False]> Skip header lines
 EOF
 
-    Header( "BackupPC Timeline", &Content() );
+    GetStatusInfo("info");
+    if ( version->parse($Info{Version}) < version->parse("4.4.1") ) {
+        Header( "BackupPC Timeline", &Content() );
+    } else {
+        Header( "Timeline", "BackupPC Timeline", &Content() );
+    }
     Trailer();
 }
 
