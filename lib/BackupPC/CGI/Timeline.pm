@@ -241,6 +241,10 @@ Show number of days
             <li><hr style ="background-color:red; color:red;" /></li>
             <li>With errors</li>
         </div>
+        <div>
+            <li><img src="$Conf{CgiImageDirURL}/BackupPC_Timeline/timeline_2.3.1/timeline_js/images/green-circle.png"></li>
+            <li>In progress</li>
+        </div>
     </div>
 
     <p>To move the Timeline: use the mouse scroll wheel, the arrow keys or grab and drag the Timeline.

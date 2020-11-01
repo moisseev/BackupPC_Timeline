@@ -72,7 +72,7 @@ EOF
               if $notFirstEvent++;
 
             printf "{'start': %s,\n",  Timeconv( $_->{startTime} );
-            printf "'end': %s,\n",     Timeconv( $_->{endTime} );
+            printf "'end': %s,\n",     Timeconv( $_->{type} eq 'active' ? time : $_->{endTime} );
             printf "'title': '%s',\n", $host;
             printf "'link': '" . $untaintedMyURL . "?host=%s',\n", $host;
             printf "'description': 'Backup #: %d', \n", $_->{num},;
@@ -97,6 +97,11 @@ EOF
             }
             else {
                 print "'color': 'fuchsia'";
+            }
+
+            if ( $_->{type} eq 'active' ) {
+                print ",\n", "durationEvent: false";
+                print ",\n", "icon: '$Conf{CgiImageDirURL}/BackupPC_Timeline/timeline_2.3.1/timeline_js/images/green-circle.png'"
             }
 
             print "}";
